@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/robot_bannerv2.jpeg" alt="simple 4WD diffbot" width="820">
+  <img src="docs/images/robot_babberv2.jpeg" alt="simple 4WD diffbot" width="820">
 </p>
 
 <h1 align="center">Simple 4WD Diffbot</h1>
