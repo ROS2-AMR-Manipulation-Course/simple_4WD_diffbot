@@ -41,8 +41,8 @@ robot model, simulation, teleoperation, SLAM mapping, localization and autonomou
 </td>
 </tr>
 <tr>
-<td><b>It maps.</b> Drive with the PS4 controller and <code>slam_toolbox</code> builds the classroom map. <a href="docs/videos/mapping.mp4">Open video</a></td>
-<td><b>It follows a path.</b> Nav2 with Regulated Pure Pursuit: clean and light on CPU, best in open space. <a href="docs/videos/nav2_pure_pursuit.mp4">Open video</a></td>
+<td><b>It maps.</b> Drive with the PS4 controller and <code>slam_toolbox</code> builds the classroom map.</td>
+<td><b>It follows a path.</b> Nav2 with Regulated Pure Pursuit: clean and light on CPU, best in open space.</td>
 </tr>
 <tr>
 <td width="50%">
@@ -53,8 +53,8 @@ robot model, simulation, teleoperation, SLAM mapping, localization and autonomou
 </td>
 </tr>
 <tr>
-<td><b>It dodges (DWB).</b> Navigating around a moving obstacle with the DWB controller. <a href="docs/videos/nav2_dwb_dynamic_obstacle.mp4">Open video</a></td>
-<td><b>It dodges (MPPI).</b> The same test with the MPPI controller, which swerves earlier and moves more smoothly. <a href="docs/videos/nav2_mppi_dynamic_obstacle.mp4">Open video</a></td>
+<td><b>It dodges (DWB).</b> Navigating around a moving obstacle with the DWB controller.</td>
+<td><b>It dodges (MPPI).</b> The same test with the MPPI controller, which swerves earlier and moves more smoothly.</td>
 </tr>
 </table>
 
