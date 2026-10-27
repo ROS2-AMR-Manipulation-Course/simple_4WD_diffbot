@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<robot name="simple_diffbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Dimensions (m) and masses (kg) -->
+  <xacro:property name="chassis_length" value="0.30"/>
+  <xacro:property name="chassis_width"  value="0.22"/>
+  <xacro:property name="chassis_height" value="0.12"/>
+  <xacro:property name="chassis_mass"   value="3.0"/>
+  <xacro:property name="ground_clearance" value="0.02"/>
+
+  <xacro:property name="wheel_radius" value="0.05"/>
+  <xacro:property name="wheel_width"  value="0.025"/>
+  <xacro:property name="wheel_mass"   value="0.2"/>
+  <!-- Gap between chassis side and wheel inner face -->
+  <xacro:property name="wheel_side_gap" value="0.005"/>
+  <!-- Centre-to-centre track. A 0.18 m track would put the wheels inside the 0.22 m wide
+       chassis, so the default is derived: chassis_width + wheel_width + 2*gap = 0.255 m.
+       Override with wheel_track:=... (must be >= chassis_width + wheel_width). -->
+  <xacro:arg name="wheel_track" default="0.255"/>
+  <xacro:property name="wheel_track" value="$(arg wheel_track)"/>
+  <!-- Skid-steer slip correction for Gazebo DiffDrive: effective separation = wheel_track * factor.
+       1.0 = ideal. Calibrate: command a known angular.z, compare /odom yaw with true yaw. -->
+  <xacro:arg name="skid_steer_factor" default="1.4"/>
+  <xacro:property name="skid_steer_factor" value="$(arg skid_steer_factor)"/>
+  <xacro:property name="wheel_x_offset" value="0.10"/>  <!-- front/rear axle distance from base_link -->
+
+  <xacro:property name="laser_x" value="0.05"/>
+
+  <!-- AI Farm Robotics logo decals on the chassis sides (visual only, 497:466 aspect) -->
+  <xacro:property name="logo_w" value="0.06"/>
+  <xacro:property name="logo_h" value="0.06"/>
+
+  <!-- base_link sits on the wheel axle height; chassis centre relative to base_link -->
+  <xacro:property name="chassis_center_z" value="${ground_clearance + chassis_height/2.0 - wheel_radius}"/>
+
+  <!-- Fail early if the wheels would intersect the chassis -->
+  <xacro:if value="${wheel_track &lt; chassis_width + wheel_width}">
+    <error wheel_track_too_small="${1/0}"/>
+  </xacro:if>
+
+  <material name="chassis_blue"><color rgba="0.1 0.3 0.8 1.0"/></material>
+  <material name="wheel_black"><color rgba="0.05 0.05 0.05 1.0"/></material>
+  <material name="sensor_dark"><color rgba="0.2 0.2 0.2 1.0"/></material>
+  <material name="sensor_green"><color rgba="0.1 0.7 0.2 1.0"/></material>
+
+  <xacro:include filename="inertial_macros.xacro"/>
+  <xacro:include filename="wheel.xacro"/>
+
+  <link name="base_footprint"/>
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 ${chassis_center_z}"/>
+      <geometry><box size="${chassis_length} ${chassis_width} ${chassis_height}"/></geometry>
+      <material name="chassis_blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${chassis_center_z}"/>
+      <geometry><box size="${chassis_length} ${chassis_width} ${chassis_height}"/></geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 ${chassis_center_z}"/>
+      <mass value="${chassis_mass}"/>
+      <inertia ixx="${chassis_mass*(chassis_width**2+chassis_height**2)/12.0}" ixy="0" ixz="0"
+               iyy="${chassis_mass*(chassis_length**2+chassis_height**2)/12.0}" iyz="0"
+               izz="${chassis_mass*(chassis_length**2+chassis_width**2)/12.0}"/>
+    </inertial>
+  </link>
+
+  <!-- Logo decals: left (+y) faces +y, right (-y) is yawed by pi to face -y -->
+  <xacro:macro name="logo_decal" params="name y_side">
+    <link name="logo_${name}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 ${0 if y_side &gt; 0 else pi}"/>
+        <geometry>
+          <mesh filename="file://$(find simple_diffbot_description)/meshes/logo_plane.dae"
+                scale="${logo_w} 1 ${logo_h}"/>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="logo_${name}_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="logo_${name}_link"/>
+      <origin xyz="0 ${y_side * (chassis_width/2.0 + 0.0005)} ${chassis_center_z}" rpy="0 0 0"/>
+    </joint>
+  </xacro:macro>
+  <xacro:logo_decal name="left"  y_side="1"/>
+  <xacro:logo_decal name="right" y_side="-1"/>
+
+  <xacro:wheel name="front_left"  x_pos="${wheel_x_offset}"  y_side="1"/>
+  <xacro:wheel name="rear_left"   x_pos="${-wheel_x_offset}" y_side="1"/>
+  <xacro:wheel name="front_right" x_pos="${wheel_x_offset}"  y_side="-1"/>
+  <xacro:wheel name="rear_right"  x_pos="${-wheel_x_offset}" y_side="-1"/>
+
+  <xacro:include filename="sensors.xacro"/>
+
+  <xacro:include filename="gazebo.xacro"/>
+  <xacro:gz_plugins/>
+
+  <!-- ros2_control is intentionally not included yet. Controlled joints will be:
+       front_left_wheel_joint, rear_left_wheel_joint, front_right_wheel_joint, rear_right_wheel_joint -->
+
+</robot>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Solid box of mass m and size x*y*z, centred on the link origin -->
+  <xacro:macro name="box_inertial" params="m x y z">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(y*y+z*z)/12.0}" ixy="0" ixz="0"
+               iyy="${m*(x*x+z*z)/12.0}" iyz="0"
+               izz="${m*(x*x+y*y)/12.0}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- Solid cylinder whose symmetry axis is the link Z axis -->
+  <xacro:macro name="cylinder_inertial" params="m r h">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(3*r*r+h*h)/12.0}" ixy="0" ixz="0"
+               iyy="${m*(3*r*r+h*h)/12.0}" iyz="0"
+               izz="${m*r*r/2.0}"/>
+    </inertial>
+  </xacro:macro>
+
+</robot>

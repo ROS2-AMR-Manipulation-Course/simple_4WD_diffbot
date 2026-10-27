@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!--
+    One driven wheel. y_side is +1 (left) or -1 (right).
+    The wheel link frame has its Z axis along the axle. The joint origin rotates
+    it by -90 deg about X so that the joint axis (0 0 1) points along base_link +Y.
+    Positive joint rotation therefore drives the robot forward (+X) for all wheels.
+  -->
+  <xacro:macro name="wheel" params="name x_pos y_side">
+    <link name="${name}_wheel_link">
+      <visual>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+        <material name="wheel_black"/>
+      </visual>
+      <collision>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+      </collision>
+      <xacro:cylinder_inertial m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}"/>
+    </link>
+
+    <joint name="${name}_wheel_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${name}_wheel_link"/>
+      <origin xyz="${x_pos} ${y_side * wheel_track / 2.0} 0" rpy="${-pi/2} 0 0"/>
+      <axis xyz="0 0 1"/>
+      <dynamics damping="0.01" friction="0.01"/>
+    </joint>
+  </xacro:macro>
+
+</robot>
