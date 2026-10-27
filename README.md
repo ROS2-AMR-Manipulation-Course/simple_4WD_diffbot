@@ -34,10 +34,10 @@ robot model, simulation, teleoperation, SLAM mapping, localization and autonomou
 <table>
 <tr>
 <td width="50%">
-  <video src="docs/videos/mapping.mp4" controls width="100%"></video>
+  <video src="https://github.com/user-attachments/assets/5c9bf0af-d247-4468-8790-493635fecc37" controls width="100%"></video>
 </td>
 <td width="50%">
-  <video src="docs/videos/nav2_pure_pursuit.mp4" controls width="100%"></video>
+  <video src="https://github.com/user-attachments/assets/5317af04-7a0a-4b30-aa12-03cba8b1c8ce" controls width="100%"></video>
 </td>
 </tr>
 <tr>
@@ -46,10 +46,10 @@ robot model, simulation, teleoperation, SLAM mapping, localization and autonomou
 </tr>
 <tr>
 <td width="50%">
-  <video src="docs/videos/nav2_dwb_dynamic_obstacle.mp4" controls width="100%"></video>
+  <video src="https://github.com/user-attachments/assets/8b129507-cd3a-4ffe-b994-3f10320fd117" controls width="100%"></video>
 </td>
 <td width="50%">
-  <video src="docs/videos/nav2_mppi_dynamic_obstacle.mp4" controls width="100%"></video>
+  <video src="https://github.com/user-attachments/assets/7f755b05-de1f-405b-b164-61f7a4bd833b" controls width="100%"></video>
 </td>
 </tr>
 <tr>
